@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"   // You can change to "mysql" or "postgresql" later
+  provider = "postgresql"   // or "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id      Int     @id @default(autoincrement()) // Primary key auto increment
-  name    String
-  email   String  @unique                      // Unique email
-  createdAt DateTime @default(now())           // Auto timestamp
+  id        String   @id @default(uuid())   // UUID primary key
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
 }
