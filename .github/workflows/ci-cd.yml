@@ -1,0 +1,58 @@
+name: Node.js CI/CD Pipeline
+
+# Trigger workflow on push to main branch or PR
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      # 3️⃣ Install PNPM
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 4️⃣ Install dependencies
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5️⃣ Run linting (optional)
+      - name: Lint code
+        run: pnpm lint
+
+      # 6️⃣ Run tests (if you have tests)
+      - name: Run tests
+        run: pnpm test
+
+      # 7️⃣ Generate Prisma client
+      - name: Generate Prisma Client
+        run: pnpm prisma generate
+
+      # 8️⃣ Build the project (TypeScript)
+      - name: Build project
+        run: pnpm build
+
+      # 9️⃣ Docker build (optional, if deploying with Docker)
+      - name: Build Docker image
+        run: docker build -t your-dockerhub-username/sugar-backend:latest.
+
+      #  🔟 Docker push (optional)
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push your-dockerhub-username/sugar-backend:latest
