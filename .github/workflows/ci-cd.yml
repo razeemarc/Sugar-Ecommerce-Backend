@@ -16,17 +16,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Setup Node.js environment
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
-
-      # 3️⃣ Install PNPM
+      
+      # 3️⃣ Install pnpm
       - name: Install pnpm
         run: npm install -g pnpm
-
+      
       # 4️⃣ Install dependencies
       - name: Install dependencies
         run: pnpm install
