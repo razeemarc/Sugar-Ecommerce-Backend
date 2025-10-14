@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: sugar_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/sugar_db
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npx prisma generate && npm run start"
+
   postgres:
     image: postgres:16
     container_name: postgres_db
